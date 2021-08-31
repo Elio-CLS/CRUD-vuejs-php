@@ -165,9 +165,7 @@ export default {
 
         console.table(datosEnviar);
 
-        fetch(
-          "http://localhost/CRUD_vuejs_php/empleados-main/index.php?actualizar=" +
-            this.id,
+        fetch("http://localhost/CRUD_vuejs_php/empleados-main/index.php?actualizar="+this.id,
           {
             method: "POST",
             body: JSON.stringify(datosEnviar),
@@ -218,8 +216,7 @@ export default {
       this.action = true;
       this.id = id;
       fetch(
-        "http://localhost/CRUD_vuejs_php/empleados-main/index.php?consultar=" +
-          id
+        "http://localhost/CRUD_vuejs_php/empleados-main/index.php?consultar="+id
       )
         .then((respuesta) => respuesta.json())
         .then((datosRespuesta) => {
