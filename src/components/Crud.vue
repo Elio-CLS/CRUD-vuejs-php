@@ -50,7 +50,7 @@
                     <button type="submit" class="btn btn-success me-2">
                       Agregar
                     </button>
-                    <!-- <router-link :to="{name:'Listar'}" class="btn btn-danger">Cancelar</router-link> -->
+
                     <button
                       v-on:click="borrarCampos()"
                       type="button"
@@ -128,12 +128,11 @@ export default {
   },
 
   methods: {
-    // http://localhost/CRUD_vuejs_php/empleados-main/index.php
+
     consultarEmpleados() {
       fetch("http://localhost/CRUD_vuejs_php/empleados-main/index.php")
         .then((respuesta) => respuesta.json())
         .then((datosRespuesta) => {
-          // console.table(datosRespuesta);
 
           // Valida la informacion
           this.empleados = [];
@@ -156,16 +155,19 @@ export default {
     },
 
     registrar() {
-      if (this.action === true) {
-        const datosEnviar = {
+      const urlUpdate = "http://localhost/CRUD_vuejs_php/crudvue/api/index.php?actualizar="+this.id;
+      const urlNew = "http://localhost/CRUD_vuejs_php/crudvue/api/index.php?insertar=1";
+      const url = this.action === true ? urlUpdate : urlNew;
+      const datosEnviar = this.action === true ? {
           id: this.id,
+          nombre: this.registro.nombre,
+          correo: this.registro.correo,
+        } : {
           nombre: this.registro.nombre,
           correo: this.registro.correo,
         };
 
-        console.table(datosEnviar);
-
-        fetch("http://localhost/CRUD_vuejs_php/empleados-main/index.php?actualizar="+this.id,
+        fetch(url,
           {
             method: "POST",
             body: JSON.stringify(datosEnviar),
@@ -179,37 +181,7 @@ export default {
             this.consultarEmpleados();
             this.showCrear();
           });
-      } else {
-        const datosEnviar = {
-          nombre: this.registro.nombre,
-          correo: this.registro.correo,
-        };
-
-        fetch(
-          "http://localhost/CRUD_vuejs_php/empleados-main/index.php?insertar=1",
-          {
-            method: "POST",
-            body: JSON.stringify(datosEnviar),
-          }
-        )
-          .then((respuesta) => respuesta.json())
-          .then((datosRespuesta) => {
-            console.log(datosRespuesta);
-            this.consultarEmpleados();
-            this.showCrear();
-          });
-      }
-    },
-
-    borrarCampos() {
-      const reset = document.querySelector("#formulario").reset();
-      this.action = false;
-      this.id = null;
-      return reset;
-    },
-
-    showCrear() {
-      this.crear == false ? (this.crear = true) : (this.crear = false);
+      
     },
 
     obtenerInfo(id) {
@@ -220,13 +192,24 @@ export default {
       )
         .then((respuesta) => respuesta.json())
         .then((datosRespuesta) => {
-          console.table(datosRespuesta);
           console.log(this.id);
           this.registro = datosRespuesta[0];
           this.showCrear();
         })
         .catch(console.log);
     },
+
+    borrarCampos() {
+      const reset = document.querySelector("#formulario").reset();
+      //this.action = false;
+      //this.id = null;
+      return reset;
+    },
+
+    showCrear() {
+      this.crear == false ? (this.crear = true) : (this.crear = false);
+    },
+
   },
 };
 </script>
