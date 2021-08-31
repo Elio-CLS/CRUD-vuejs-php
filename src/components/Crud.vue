@@ -205,6 +205,8 @@ export default {
 
     borrarCampos() {
       const reset = document.querySelector("#formulario").reset();
+      this.action = false;
+      this.id = null;
       return reset;
     },
 
